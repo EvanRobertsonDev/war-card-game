@@ -37,6 +37,7 @@ public class WarGame extends Game{
     */
     @Override
     public void play() {
+        boolean debugMode = false;
         //Loop until valid entry is made
         while (true) {
             //Ask user for amount of players
@@ -101,9 +102,13 @@ public class WarGame extends Game{
         System.out.println("Game has started. Type 'rules' to view rules at anytime");
         
         //Loop until a player no longer has cards left
-        while (playerOneDeck.getCards().size() > 0 || playerTwoDeck.getCards().size() > 0) {
-            //Get input from players
-            String command = input.nextLine();
+        while (playerOneDeck.getCards().size() > 0 && playerTwoDeck.getCards().size() > 0) {
+            String command;
+            //Hidden debug feature to play through entire game instantly
+            if (debugMode)
+                command = "f";
+            else
+            command = input.nextLine();
             if (command.equalsIgnoreCase("f")) {
                 //Announce what cards were flipped up
                 System.out.println("Flipping...");
@@ -159,6 +164,10 @@ public class WarGame extends Game{
                 //Call rules method from war class
                 War.rules();
             }
+            else if (command.equalsIgnoreCase("debug")) {
+                //Enables fast play
+                debugMode = true;
+            }
             else {
                 //Remind user of commands
                 System.out.println("Please enter a valid command, commands can "
@@ -166,6 +175,7 @@ public class WarGame extends Game{
             }
         }
         //Declare winner after loop has been broken
+        winCheck(playerOneDeck, playerTwoDeck);
         declareWinner(winner);
     }
 
@@ -174,7 +184,7 @@ public class WarGame extends Game{
     */
     @Override
     public void declareWinner(Player winner) {
-        System.out.println("The winner of the match is " + winner + "!");
+        System.out.println("The winner of the match is " + winner.getName() + "!");
     }
     
     /** Compares cards for a War event
@@ -185,7 +195,7 @@ public class WarGame extends Game{
         //Set the current position of the deck to zero
         int deckPos = 0;
         //Check if each player has enough cards to do a War
-        if (playerOneDeck.getCards().size() > 3 || playerTwoDeck.getCards().size() > 3) {
+        if (playerOneDeck.getCards().size() > 3 && playerTwoDeck.getCards().size() > 3) {
             //Loop until someone has one the hand
             while (true) {
                 //Compare values of next flipped cards
@@ -241,24 +251,25 @@ public class WarGame extends Game{
         }
         //If player does not have enough cards
         else {
-            if (playerOneDeck.getCards().size() < 3) {
+            winCheck(playerOneDeck, playerTwoDeck);
+        } 
+    }
+    
+    public void winCheck(GroupOfCards playerOneDeck, GroupOfCards playerTwoDeck) {
+        if (playerOneDeck.getCards().size() < 3) {
                 //Announce loss
-                System.out.println("War is unable to be played, " + p1.getName() + 
+                System.out.println("Card is unable to be played, " + p1.getName() + 
                         " does not have enough cards and therefore forfeits");
                 playerOneDeck.getCards().clear();
                 winner = p2;
             }
             else {
                 //Announce loss
-                System.out.println("War is unable to be played, " + p2.getName() +
+                System.out.println("Card is unable to be played, " + p2.getName() +
                         " does not have ennough cards and therefore forfeits");
                 playerTwoDeck.getCards().clear();
                 winner = p1;
             }
-        }
-            
-            
-            
     }
     
 }
