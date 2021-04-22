@@ -110,50 +110,13 @@ public class WarGame extends Game{
             else
             command = input.nextLine();
             if (command.equalsIgnoreCase("f")) {
-                //Announce what cards were flipped up
-                System.out.println("Flipping...");
-                System.out.println(p1.getName() + " flipped: " + playerOneDeck.getCards().get(0).toString()
-                + "\n" + p2.getName() +" flipped: " + playerTwoDeck.getCards().get(0).toString());
-                //Check card values against each other
-                if (playerOneDeck.getCards().get(0).getValue().compareTo(playerTwoDeck.getCards().get(0).getValue()) > 0) {
-                    //Announce winner of hand
-                    System.out.println(p1.getName() + " won the hand!");
-                    //Add new cards to deck
-                    playerOneDeck.getCards().add(playerOneDeck.getCards().get(0));
-                    playerOneDeck.getCards().add(playerTwoDeck.getCards().get(0));
-                    //Remove cards at front of deck
-                    playerOneDeck.getCards().remove(0);
-                    playerTwoDeck.getCards().remove(0);
-                }
-                //Check card values against each other
-                else if (playerOneDeck.getCards().get(0).getValue().compareTo(playerTwoDeck.getCards().get(0).getValue()) < 0) {
-                    //Announce winner of hand
-                    System.out.println(p2.getName() + " won the hand!");
-                    //Add new cards to deck
-                    playerTwoDeck.getCards().add(playerTwoDeck.getCards().get(0));
-                    playerTwoDeck.getCards().add(playerOneDeck.getCards().get(0));
-                    //Remove cards at front of deck
-                    playerOneDeck.getCards().remove(0);
-                    playerTwoDeck.getCards().remove(0);
-                }
-                //If card values are equal
-                else {
-                    //Declare war
-                    War(playerOneDeck, playerTwoDeck);
-                }
+                flip(playerOneDeck, playerTwoDeck);
             }
             else if (command.equalsIgnoreCase("d")) {
-                //Display amount of cards in each deck
-                System.out.println(p1.getName() + "'s Deck: " + playerOneDeck.getCards().size() + 
-                        "\n" + p2.getName() +"'s Deck: " + playerTwoDeck.getCards().size());
+                display(playerOneDeck, playerTwoDeck);
             }
             else if (command.equalsIgnoreCase("s")) {
-                //Announce the shuffle
-                System.out.println("Shuffling decks...");
-                //Shuffle decks
-                playerOneDeck.shuffle();
-                playerTwoDeck.shuffle();
-                System.out.println("Cards have been shuffled");
+                shuffleDecks(playerOneDeck, playerTwoDeck);
             }
             else if (command.equalsIgnoreCase("e")) {
                 //Exit to start menu
@@ -179,6 +142,68 @@ public class WarGame extends Game{
         declareWinner(winner);
     }
 
+    /** Simulates a flip from the top of each deck
+    * @param playerOneDeck player 1's deck
+    * @param playerTwoDeck player 2's deck
+    */
+    public void flip(GroupOfCards playerOneDeck, GroupOfCards playerTwoDeck) {
+        //Announce what cards were flipped up
+        System.out.println("Flipping...");
+        System.out.println(p1.getName() + " flipped: " + playerOneDeck.getCards().get(0).toString()
+        + "\n" + p2.getName() +" flipped: " + playerTwoDeck.getCards().get(0).toString());
+        //Check card values against each other
+        if (playerOneDeck.getCards().get(0).getValue().compareTo(playerTwoDeck.getCards().get(0).getValue()) > 0) {
+            //Announce winner of hand
+            System.out.println(p1.getName() + " won the hand!");
+            //Add new cards to deck
+            playerOneDeck.getCards().add(playerOneDeck.getCards().get(0));
+            playerOneDeck.getCards().add(playerTwoDeck.getCards().get(0));
+            //Remove cards at front of deck
+            playerOneDeck.getCards().remove(0);
+            playerTwoDeck.getCards().remove(0);
+        }
+        //Check card values against each other
+        else if (playerOneDeck.getCards().get(0).getValue().compareTo(playerTwoDeck.getCards().get(0).getValue()) < 0) {
+            //Announce winner of hand
+            System.out.println(p2.getName() + " won the hand!");
+            //Add new cards to deck
+            playerTwoDeck.getCards().add(playerTwoDeck.getCards().get(0));
+            playerTwoDeck.getCards().add(playerOneDeck.getCards().get(0));
+            //Remove cards at front of deck
+            playerOneDeck.getCards().remove(0);
+            playerTwoDeck.getCards().remove(0);
+        }
+        //If card values are equal
+        else {
+            //Declare war
+            War(playerOneDeck, playerTwoDeck);
+        }
+    }
+    
+    /** Displays the amount of cards in each deck
+    * @param playerOneDeck player 1's deck
+    * @param playerTwoDeck player 2's deck
+    */
+    public void display(GroupOfCards playerOneDeck, GroupOfCards playerTwoDeck) {
+        //Display amount of cards in each deck
+        System.out.println(p1.getName() + "'s Deck: " + playerOneDeck.getCards().size() + 
+                "\n" + p2.getName() +"'s Deck: " + playerTwoDeck.getCards().size());
+    }
+    
+     /** Shuffles the decks
+    * @param playerOneDeck player 1's deck
+    * @param playerTwoDeck player 2's deck
+    */
+    public void shuffleDecks(GroupOfCards playerOneDeck, GroupOfCards playerTwoDeck) {
+        //Announce the shuffle
+        System.out.println("Shuffling decks...");
+        //Shuffle decks
+        playerOneDeck.shuffle();
+        playerTwoDeck.shuffle();
+        System.out.println("Cards have been shuffled");
+    }
+    
+    
     /** Takes the winner as a player object and announces that they won
     * @param winner the winner of the match
     */
